@@ -120,6 +120,7 @@ namespace dCom.Configuration
                         {
                             pointTypeToConfiguration.Add(ci.Description, ci);
                         }
+
                     }
                     catch (ArgumentException argEx)
                     {

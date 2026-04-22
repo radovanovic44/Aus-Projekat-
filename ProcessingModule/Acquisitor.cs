@@ -59,7 +59,7 @@ namespace ProcessingModule
             while (true)
             {
                 acquisitionTrigger.WaitOne();
-                foreach(IConfigItem item in configuration.GetConfigurationItems())
+                foreach (IConfigItem item in configuration.GetConfigurationItems())
                 {
                     item.SecondsPassedSinceLastPoll++;
 
@@ -78,6 +78,9 @@ namespace ProcessingModule
                         }
                         catch (Exception ex)
                         {
+                            stateUpdater.LogMessage("Acquisition trigger received");
+                            stateUpdater.LogMessage($"{item.Description} | passed={item.SecondsPassedSinceLastPoll} | interval={item.AcquisitionInterval}");
+                            stateUpdater.LogMessage($"READ {item.Description} addr={item.StartAddress} count={item.NumberOfRegisters}");
                             stateUpdater.LogMessage(
                                 $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}");
                         }

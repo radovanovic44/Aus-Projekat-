@@ -111,9 +111,10 @@ namespace dCom.ViewModel
 			this.automationManager = new AutomationManager(this, processingManager, automationTrigger, configuration);
 			InitializePointCollection();
 			InitializeAndStartThreads();
-			logBuilder = new StringBuilder();
+            logBuilder = new StringBuilder();
 			ConnectionState = ConnectionState.DISCONNECTED;
-			Thread.CurrentThread.Name = "Main Thread";
+		
+            Thread.CurrentThread.Name = "Main Thread";
 		}
 
 		#region Private methods
