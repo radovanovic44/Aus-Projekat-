@@ -22,17 +22,50 @@ namespace Modbus.ModbusFunctions
         }
 
         /// <inheritdoc />
+
         public override byte[] PackRequest()
         {
-            //TO DO: IMPLEMENT
-            throw new NotImplementedException();
+            ModbusWriteCommandParameters p = (ModbusWriteCommandParameters)CommandParameters;
+
+            byte[] request = new byte[12];
+
+            request[0] = (byte)(p.TransactionId >> 8);
+            request[1] = (byte)(p.TransactionId);
+            request[2] = 0;
+            request[3] = 0;
+            request[4] = 0;
+            request[5] = 6;
+
+            request[6] = p.UnitId;
+            request[7] = (byte)ModbusFunctionCode.WRITE_SINGLE_COIL;
+
+            request[8] = (byte)(p.OutputAddress >> 8);
+            request[9] = (byte)(p.OutputAddress);
+
+            ushort coilValue = (ushort)(p.Value == 0 ? 0x0000 : 0xFF00);
+            request[10] = (byte)(coilValue >> 8);
+            request[11] = (byte)(coilValue);
+
+            return request;
         }
 
         /// <inheritdoc />
         public override Dictionary<Tuple<PointType, ushort>, ushort> ParseResponse(byte[] response)
         {
-            //TO DO: IMPLEMENT
-            throw new NotImplementedException();
+            Dictionary<Tuple<PointType, ushort>, ushort> retVal = new Dictionary<Tuple<PointType, ushort>, ushort>();
+
+            if (response[7] == ((byte)ModbusFunctionCode.WRITE_SINGLE_COIL | 0x80))
+            {
+                HandeException(response[8]);
+            }
+
+            ushort address = (ushort)((response[8] << 8) | response[9]);
+            ushort rawValue = (ushort)((response[10] << 8) | response[11]);
+            ushort value = (ushort)(rawValue == 0xFF00 ? 1 : 0);
+
+            retVal.Add(new Tuple<PointType, ushort>(PointType.DIGITAL_OUTPUT, address), value);
+
+            return retVal;
         }
     }
 }
