@@ -1,6 +1,9 @@
 STA 73
 TCP 33131
 
-DO_REG  7 1500  0  0      1     0  DO  @DigOut #
-IN_REG  1 400   0  0   4095  2000  AI  @AnaIn  #
-HR_INT  1 2300  0  0   4095  1200  AO  @AnaOut #
+IN_REG  1 400   0  0  4095  2000  AI  @L
+DO_REG  1 1500  0  0     1     0  DO  @STOP
+DO_REG  1 1502  0  0     1     0  DO  @V1
+DO_REG  1 1505  0  0     1     0  DO  @P1
+DO_REG  1 1506  0  0     1     0  DO  @P2
+HR_INT  1 2300  0  0  4095  1200  AO  @N1
